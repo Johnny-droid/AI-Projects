@@ -53,40 +53,32 @@ class State:
             [-1, -1, -1, 1, 0, 1, -1, -1, -1]
         ]
 
-        # Quando o jogador tentar andar para -1 trocar o i com o j
         self.player = 1
         self.winner = -1
         self.width = width
 
     def move(self, moveFrom, moveTo):
 
-        counter_1 = 0
-        counter_2 = 0
-
         new_state = deepcopy(self)
         new_state.board[moveTo[0]][moveTo[1]] = self.board[moveFrom[0]][moveFrom[1]]
         new_state.board[moveFrom[0]][moveFrom[1]] = EMPTY
         new_state.player = 3 - self.player
-
         
-        for i in range(self.width):
-            for j in range(self.width):
-                if new_state.board[i][j] == 1:
-                    counter_1 += 1
-                elif new_state.board[i][j] == 2:
-                    counter_2 += 1
-        
-        if counter_1 != 8 or counter_2 != 8:
-            print("Move from: ", moveFrom)
-            print("Move to: ", moveTo)
-            print("Original position: ", self.board[moveFrom[0]][moveFrom[1]])
-            print("New position: ", self.board[moveTo[0]][moveTo[1]])
-            print("After Move From: ", new_state.board[moveFrom[0]][moveFrom[1]])
-            print("After Move To: ", new_state.board[moveTo[0]][moveTo[1]])
-
+        self.update_winner()
 
         return new_state
     
+    def update_winner(self):
+        for i in range(self.width):
+            for j in range(self.width):
+                if self.board[i][j] == 1 or self.board[i][j] == 2:
+                    # If the piece is blocked, the opponent wins
+                    if len(self.available_moves_from((i, j))) == 0:
+                        self.winner = 3 - self.board[i][j]
+                        return self.winner
+        return -1
+
+
     def available_moves(self):
         moves = []
         for i in range(self.width):
@@ -130,7 +122,9 @@ class State:
 
 class Game:
 
-    def __init__(self):
+    def __init__(self, player1, player2):
+        self.player1 = player1
+        self.player2 = player2
         self.state = State(GAME_WIDTH)
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
@@ -153,16 +147,24 @@ class Game:
                                     if event.key == K_p:
                                         done = True
                             
+            if self.state.player == 1:
+                self.player1(self)
+            else:
+                self.player2(self)
 
-            execute_random_move(self)
-            
+            if self.state.winner != -1:
+                print("Player", self.state.winner, "wins!")
+                break
+
             # Wait for 1 second
-            self.clock.tick(2)
+            # self.clock.tick(1)
 
 
             self.screen.fill((0, 0, 0))
             self.draw_game()
             pygame.display.update()
+
+
 
 
     def draw_game(self):
@@ -184,34 +186,90 @@ class Game:
              INNER_SQUARE_WIDTH, INNER_SQUARE_WIDTH))
 
 
+def heuristic_function1(state, player):
+    counter = 0
+    for i in range(state.width):
+        for j in range(state.width):
+            if state.board[i][j] == player:
+                counter += len(state.available_moves_from((i, j)))
+    return counter
+
+def heuristic_function2(state, player):
+    opponent = 3 - player
+    counter = 0
+    for i in range(state.width):
+        for j in range(state.width):
+            if state.board[i][j] == opponent:
+                counter -= len(state.available_moves_from((i, j)))
+    return counter
+
+def heuristic_function3(state, player):
+    return heuristic_function1(state, player) + heuristic_function2(state, player)
+
+def heuristic_function4(state, player):
+    opponent = 3 - player
+    counter = 0
+    for i in range(state.width):
+        for j in range(state.width):
+            if state.board[i][j] == player:
+                moves = len(state.available_moves_from((i, j)))
+                if moves == 0:
+                    counter -= 100
+                elif moves == 1:
+                    counter -= 10
+            
+            if state.board[i][j] == opponent:
+                moves = len(state.available_moves_from((i, j)))
+                if moves == 0:
+                    counter += 100
+                elif moves == 1:
+                    counter += 10
+    return counter
+
+
+
+
 def execute_random_move(game):
     (moveFrom, moveTo) = random.choice(game.state.available_moves())
     game.state = game.state.move(moveFrom, moveTo)
 
+def execute_minimax_move(evaluate_func, depth):
+    def minimax_move(game):
+        best_move = None
+        best_value = -math.inf
+        for move in game.state.available_moves(): # move = ((i, j), (i', j'))
+            value = minimax(game.state.move(move[0], move[1]), depth - 1, -math.inf, math.inf, False, game.state.player, evaluate_func)
+            if (value > best_value):
+                best_value = value
+                best_move = move
+        game.state = game.state.move(best_move[0], best_move[1])
+    return minimax_move
 
 def minimax(state, depth, alpha, beta, maximizing, player, evaluate_func):
     if (depth == 0 or state.winner != -1):
         return evaluate_func(state, player)
     if (maximizing):
         value = -math.inf
-        for move in state.available_moves:
-            value = max(value, minimax(state.move(move), depth - 1, alpha, beta, False, player, evaluate_func))
+        for move in state.available_moves():
+            value = max(value, minimax(state.move(move[0], move[1]), depth - 1, alpha, beta, False, player, evaluate_func))
             alpha = max(alpha, value)
             if (beta <= alpha):
                 break
         return value
     else:
         value = math.inf
-        for move in state.available_moves:
-            value = min(value, minimax(state.move(move), depth - 1, alpha, beta, True, player, evaluate_func))
+        for move in state.available_moves():
+            value = min(value, minimax(state.move(move[0], move[1]), depth - 1, alpha, beta, True, player, evaluate_func))
             beta = min(beta, value)
             if (beta <= alpha):
                 break
         return value
 
 
-
-game = Game()
+#game = Game(execute_random_move, execute_random_move)
+#game = Game(execute_random_move, execute_minimax_move(heuristic_function1, 4))
+#game = Game(execute_random_move, execute_minimax_move(heuristic_function4, 3))
+game = Game(execute_minimax_move(heuristic_function2, 3), execute_minimax_move(heuristic_function4, 3))
 game.run()
 
 

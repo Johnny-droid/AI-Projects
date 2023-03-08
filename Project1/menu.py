@@ -11,10 +11,12 @@ class Menu:
     def __init__(self):
         self.player1 = 0    # Change this into default human player
         self.player2 = 0
+        self.board_number = 0
         self.ready = False
         self.menu = pygame_menu.Menu('Wana Game', 1200, 1000, theme=pygame_menu.themes.THEME_DEFAULT) # It's possible to change the theme or even create a new one
         self.menu.add.selector('Player 1 :', [('Human', 0), ('AI Lvl1', 1), ('AI Lvl2', 2), ('AI Lvl3', 3), ('AI Lvl4', 4)], onchange=self.set_player1)
         self.menu.add.selector('Player 2 :', [('Human', 0), ('AI Lvl1', 1), ('AI Lvl2', 2), ('AI Lvl3', 3), ('AI Lvl4', 4)], onchange=self.set_player2)
+        self.menu.add.selector('Board size :', [('9x9', 0), ('12x12', 1)], onchange=self.set_board_number)
         self.menu.add.button('Play', self.set_ready)
         self.menu.add.button('Quit', pygame_menu.events.EXIT)
 
@@ -37,16 +39,14 @@ class Menu:
         type_player = value[0][1]
         if (type_player == 1):
             player = execute_random_move
-            print("Player", n_player, "is AI Lvl1")
         elif (type_player == 2):
             player = execute_minimax_move(heuristic_function1, 3)
-            print("Player", n_player, "is AI Lvl2")
         elif (type_player == 3):
             player = execute_minimax_move(heuristic_function2, 3)
-            print("Player", n_player, "is AI Lvl3")
         elif (type_player == 4):
             player = execute_minimax_move(heuristic_function3, 4)
-            print("Player", n_player, "is AI Lvl4")
+        else:
+            return
 
         if (n_player == 1):
             self.player1 = player
@@ -54,7 +54,9 @@ class Menu:
             self.player2 = player
 
         
-
+    def set_board_number(self, value, index):
+        self.board_number = value[0][1]
+            
 
     def draw(self, screen):
         screen_width = pygame.display.get_surface().get_width()

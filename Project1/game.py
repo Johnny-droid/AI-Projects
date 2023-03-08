@@ -8,19 +8,21 @@ from board import *
 # Display Macros
 SIDE_BORDER = 150
 UP_BORDER = 50
-SQUARE_WIDTH = 100
-INNER_SQUARE_WIDTH = 90
-SQUARE_MARGIN = (SQUARE_WIDTH - INNER_SQUARE_WIDTH) / 2
-PIECE_RADIUS = 40
+BOARD_WIDTH = 900
+INNER_SQUARE_WIDTH_PERCENTAGE = 0.9
 
 
 class Game:
 
-    def __init__(self, player1, player2):
+    def __init__(self, player1, player2, board_number):
         self.player1 = player1
         self.player2 = player2
-        self.state = State(GAME_WIDTH)
+        self.state = State(board_number)
         self.clock = pygame.time.Clock()
+        self.square_width = BOARD_WIDTH / self.state.width
+        self.inner_square_width = self.square_width * INNER_SQUARE_WIDTH_PERCENTAGE
+        self.square_margin = (self.square_width - self.inner_square_width) / 2
+
 
     def player_move(self):
         if self.state.player == 1:
@@ -46,18 +48,9 @@ class Game:
 
     def draw_square(self, screen, pos, color):
         pygame.draw.rect(screen, color, 
-            (SIDE_BORDER + pos[1] * SQUARE_WIDTH + SQUARE_MARGIN, 
-             UP_BORDER + pos[0] * SQUARE_WIDTH + SQUARE_MARGIN, 
-             INNER_SQUARE_WIDTH, INNER_SQUARE_WIDTH))
+            (SIDE_BORDER + pos[1] * self.square_width + self.square_margin, 
+             UP_BORDER + pos[0] * self.square_width + self.square_margin, 
+             self.inner_square_width, self.inner_square_width))
 
-
-
-
-
-#game = Game(execute_random_move, execute_random_move)
-#game = Game(execute_random_move, execute_minimax_move(heuristic_function1, 4))
-#game = Game(execute_random_move, execute_minimax_move(heuristic_function4, 3))
-#game = Game(execute_minimax_move(heuristic_function2, 3), execute_minimax_move(heuristic_function4, 4))
-#game.run()
 
 

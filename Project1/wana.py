@@ -17,7 +17,7 @@ class Wana:
         pygame.init()
         self.state = STATE_MENU
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.game = Game(execute_random_move, execute_random_move)
+        self.game = None
         self.menu = Menu()
 
 
@@ -46,7 +46,7 @@ class Wana:
             if self.state == STATE_MENU:
                 self.menu.run(self.screen)
                 if self.menu.ready:
-                    self.game = Game(self.menu.player1, self.menu.player2)
+                    self.game = Game(self.menu.player1, self.menu.player2, self.menu.board_number)
                     self.state = STATE_GAME
                 
                 

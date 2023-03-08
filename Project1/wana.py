@@ -14,6 +14,7 @@ SCREEN_HEIGHT = 1000
 
 class Wana:
     def __init__(self):
+        pygame.init()
         self.state = STATE_MENU
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.game = Game(execute_random_move, execute_random_move)
@@ -21,33 +22,40 @@ class Wana:
 
 
     def run(self):
-        pygame.init()
+        
         pygame.display.set_caption("Wana Game")
 
         while True:
             self.screen.fill((0, 0, 0))
 
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    exit()
+            events = pygame.event.get()
+
+            # for event in pygame.event.get():
+            #     if event.type == QUIT:
+            #         exit()
                 
-                if event.type == KEYDOWN:
-                    # Press P to pause
-                    if event.key == K_p and self.state == STATE_GAME:
-                        self.prev_state = self.state
-                        self.state = STATE_PAUSE
-                    elif event.key == K_p and self.state == STATE_PAUSE:
-                        self.state = self.prev_state
+            #     if event.type == KEYDOWN:
+            #         # Press P to pause
+            #         if event.key == K_p and self.state == STATE_GAME:
+            #             self.prev_state = self.state
+            #             self.state = STATE_PAUSE
+            #         elif event.key == K_p and self.state == STATE_PAUSE:
+            #             self.state = self.prev_state
 
 
             if self.state == STATE_MENU:
-                self.menu.draw(self.screen)
-
+                self.menu.run(self.screen)
+                if self.menu.ready:
+                    self.game = Game(self.menu.player1, self.menu.player2)
+                    self.state = STATE_GAME
+                
+                
+                
             elif self.state == STATE_GAME:
                 
                 self.game.player_move()
-                if self.game.exists_winner() != -1:
-                    print("Player", self.game.exists_winner(), "wins!")
+                if self.game.get_winner() != -1:
+                    print("Player", self.game.get_winner(), "wins!")
                     break
 
                 self.game.draw(self.screen)

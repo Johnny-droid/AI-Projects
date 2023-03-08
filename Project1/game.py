@@ -28,7 +28,7 @@ class Game:
         else:
             self.player2(self)
 
-    def exists_winner(self):
+    def get_winner(self):
         return self.state.winner
 
 

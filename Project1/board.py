@@ -81,12 +81,12 @@ class State:
         new_state.board[moveTo[0]][moveTo[1]] = self.board[moveFrom[0]][moveFrom[1]]
         new_state.board[moveFrom[0]][moveFrom[1]] = EMPTY
         new_state.player = 3 - self.player
-        
-        self.update_winner()
+        new_state.update_winner()
 
         return new_state
     
     def update_winner(self):
+        #print('.')
         for i in range(self.width):
             for j in range(self.width):
                 if self.board[i][j] == 1 or self.board[i][j] == 2:

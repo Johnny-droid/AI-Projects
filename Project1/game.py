@@ -18,23 +18,30 @@ class Game:
         self.player1 = player1
         self.player2 = player2
         self.state = State(board_number)
-        self.clock = pygame.time.Clock()
         self.square_width = BOARD_WIDTH / self.state.width
         self.inner_square_width = self.square_width * INNER_SQUARE_WIDTH_PERCENTAGE
         self.square_margin = (self.square_width - self.inner_square_width) / 2
+        self.human_turn = False
+        self.human_move = [(self.state.width // 2, self.state.width // 2), (self.state.width // 2, self.state.width // 2)]
+        self.human_move_piece_selected = False
 
-
-    def player_move(self):
+    def player_move(self, key):
         if self.state.player == 1:
-            self.player1(self)
+            self.player1(self, key)
         else:
-            self.player2(self)
+            self.player2(self, key)
 
     def get_winner(self):
         return self.state.winner
 
 
     def draw(self, screen):
+        if self.human_turn:
+            self.draw_square(screen, self.human_move[0], (0, 255, 0), padding=10)
+        
+        if self.human_move_piece_selected:
+            self.draw_square(screen, self.human_move[1], (0, 155, 155), padding=10)
+
         for i in range(self.state.width):
             for j in range(self.state.width):
                 if self.state.board[i][j] == -1:
@@ -46,11 +53,12 @@ class Game:
                 elif self.state.board[i][j] == 2:
                     self.draw_square(screen, (i, j), (0, 0, 255))
 
-    def draw_square(self, screen, pos, color):
+    def draw_square(self, screen, pos, color, padding=0):
         pygame.draw.rect(screen, color, 
-            (SIDE_BORDER + pos[1] * self.square_width + self.square_margin, 
-             UP_BORDER + pos[0] * self.square_width + self.square_margin, 
-             self.inner_square_width, self.inner_square_width))
+            (SIDE_BORDER + pos[1] * self.square_width + self.square_margin - padding/2, 
+             UP_BORDER + pos[0] * self.square_width + self.square_margin - padding/2, 
+             self.inner_square_width + padding, self.inner_square_width + padding))
 
 
 
+        

@@ -27,20 +27,20 @@ class Wana:
 
         while True:
             self.screen.fill((0, 0, 0))
-
-            events = pygame.event.get()
-
-            # for event in pygame.event.get():
-            #     if event.type == QUIT:
-            #         exit()
+            key = None
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    exit()
                 
-            #     if event.type == KEYDOWN:
-            #         # Press P to pause
-            #         if event.key == K_p and self.state == STATE_GAME:
-            #             self.prev_state = self.state
-            #             self.state = STATE_PAUSE
-            #         elif event.key == K_p and self.state == STATE_PAUSE:
-            #             self.state = self.prev_state
+                if event.type == KEYDOWN:
+                    # Press P to pause
+                    if event.key == K_p and self.state == STATE_GAME:
+                        self.prev_state = self.state
+                        self.state = STATE_PAUSE
+                    elif event.key == K_p and self.state == STATE_PAUSE:
+                        self.state = self.prev_state
+                    else:
+                        key = event.key
 
 
             if self.state == STATE_MENU:
@@ -53,7 +53,7 @@ class Wana:
                 
             elif self.state == STATE_GAME:
                 
-                self.game.player_move()
+                self.game.player_move(key)
                 if self.game.get_winner() != -1:
                     print("Player", self.game.get_winner(), "wins!")
                     break

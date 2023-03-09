@@ -1,5 +1,51 @@
 import math
 import random
+from pygame.locals import *
+
+# HUMAN MOVE
+def execute_human_move(game, key=None):
+    game.human_turn = True
+    if key == None:
+        return
+
+    game.human_turn = True
+    # Decide which piece to move
+    if (not game.human_move_piece_selected):
+
+        if key == K_UP:
+            game.human_move[0] = ((game.human_move[0][0] - 1)%game.state.width, game.human_move[0][1])
+        elif key == K_DOWN:
+            game.human_move[0] = ((game.human_move[0][0] + 1)%game.state.width , game.human_move[0][1])
+        elif key == K_LEFT:
+            game.human_move[0] = (game.human_move[0][0], (game.human_move[0][1] - 1)%game.state.width)
+        elif key == K_RIGHT:
+            game.human_move[0] = (game.human_move[0][0], (game.human_move[0][1] + 1)%game.state.width)
+        elif key == K_SPACE and game.state.board[game.human_move[0][0]][game.human_move[0][1]] == game.state.player:
+            game.human_move[1] = game.human_move[0]
+            game.human_move_piece_selected = True
+        
+        
+    # Decide where to move the piece
+    else:
+
+        if key == K_UP:
+            game.human_move[1] = (game.human_move[1][0] - 1, game.human_move[1][1])
+        elif key == K_DOWN:
+            game.human_move[1] = ((game.human_move[1][0] + 1)%game.state.width , game.human_move[1][1])
+        elif key == K_LEFT:
+            game.human_move[1] = (game.human_move[1][0], game.human_move[1][1] - 1)
+        elif key == K_RIGHT:
+            game.human_move[1] = (game.human_move[1][0], (game.human_move[1][1] + 1)%game.state.width)
+
+        elif key == K_SPACE and (game.human_move[1] != game.human_move[0]) and (tuple(game.human_move) in game.state.available_moves_from(game.human_move[0])):
+            game.state = game.state.move(game.human_move[0], game.human_move[1])
+            game.human_move[0] = game.human_move[1]
+            game.human_move_piece_selected = False
+            game.human_turn = False
+
+        
+
+            
 
 
 def heuristic_function1(state, player):
@@ -45,12 +91,12 @@ def heuristic_function4(state, player):
 
 
 
-def execute_random_move(game):
+def execute_random_move(game, key=None):
     (moveFrom, moveTo) = random.choice(game.state.available_moves())
     game.state = game.state.move(moveFrom, moveTo)
 
 def execute_minimax_move(evaluate_func, depth):
-    def minimax_move(game):
+    def minimax_move(game, key=None):
         best_move = None
         best_value = -math.inf
         for move in game.state.available_moves(): # move = ((i, j), (i', j'))

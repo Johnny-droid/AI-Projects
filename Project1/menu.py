@@ -9,8 +9,8 @@ from ai import *
 class Menu:
 
     def __init__(self):
-        self.player1 = 0    # Change this into default human player
-        self.player2 = 0
+        self.player1 = execute_human_move   
+        self.player2 = execute_human_move    
         self.board_number = 0
         self.ready = False
         self.menu = pygame_menu.Menu('Wana Game', 1200, 1000, theme=pygame_menu.themes.THEME_DEFAULT) # It's possible to change the theme or even create a new one
@@ -37,7 +37,9 @@ class Menu:
         
     def set_player(self, value, n_player):
         type_player = value[0][1]
-        if (type_player == 1):
+        if (type_player == 0):
+            player = execute_human_move
+        elif (type_player == 1):
             player = execute_random_move
         elif (type_player == 2):
             player = execute_minimax_move(heuristic_function1, 3)

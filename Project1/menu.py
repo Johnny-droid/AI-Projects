@@ -1,6 +1,5 @@
 # Class Menu using pygame
 
-import pygame
 import pygame_menu
 
 from ai import *
@@ -8,12 +7,12 @@ from ai import *
 
 class Menu:
 
-    def __init__(self):
+    def __init__(self, width, height):
         self.player1 = execute_human_move   
         self.player2 = execute_human_move    
         self.board_number = 0
         self.ready = False
-        self.menu = pygame_menu.Menu('Wana Game', 1200, 1000, theme=pygame_menu.themes.THEME_DEFAULT) # It's possible to change the theme or even create a new one
+        self.menu = pygame_menu.Menu('Wana Game', width, height, theme=pygame_menu.themes.THEME_DEFAULT) # It's possible to change the theme or even create a new one
         self.menu.add.selector('Player 1 :', [('Human', 0), ('AI Lvl1', 1), ('AI Lvl2', 2), ('AI Lvl3', 3), ('AI Lvl4', 4)], onchange=self.set_player1)
         self.menu.add.selector('Player 2 :', [('Human', 0), ('AI Lvl1', 1), ('AI Lvl2', 2), ('AI Lvl3', 3), ('AI Lvl4', 4)], onchange=self.set_player2)
         self.menu.add.selector('Board size :', [('9x9', 0), ('12x12', 1)], onchange=self.set_board_number)

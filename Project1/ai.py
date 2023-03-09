@@ -29,11 +29,11 @@ def execute_human_move(game, key=None):
     else:
 
         if key == K_UP:
-            game.human_move[1] = (game.human_move[1][0] - 1, game.human_move[1][1])
+            game.human_move[1] = ((game.human_move[1][0] - 1)%game.state.width, game.human_move[1][1])
         elif key == K_DOWN:
             game.human_move[1] = ((game.human_move[1][0] + 1)%game.state.width , game.human_move[1][1])
         elif key == K_LEFT:
-            game.human_move[1] = (game.human_move[1][0], game.human_move[1][1] - 1)
+            game.human_move[1] = (game.human_move[1][0], (game.human_move[1][1] - 1)%game.state.width)
         elif key == K_RIGHT:
             game.human_move[1] = (game.human_move[1][0], (game.human_move[1][1] + 1)%game.state.width)
 

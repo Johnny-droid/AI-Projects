@@ -1,7 +1,7 @@
 from game import *
 from menu import *
 from ai import *
-
+import pygame
 
 STATE_MENU = 0
 STATE_GAME = 1
@@ -10,7 +10,7 @@ STATE_GAMEOVER = 3
 STATE_EXIT = 4
 
 SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 1000
+SCREEN_HEIGHT = 900
 
 class Wana:
     def __init__(self):
@@ -18,7 +18,8 @@ class Wana:
         self.state = STATE_MENU
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.game = None
-        self.menu = Menu()
+        self.menu = Menu(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.clock = pygame.time.Clock()
 
 
     def run(self):
@@ -55,18 +56,27 @@ class Wana:
                 
                 self.game.player_move(key)
                 if self.game.get_winner() != -1:
-                    print("Player", self.game.get_winner(), "wins!")
-                    break
+                    self.state = STATE_GAMEOVER
 
                 self.game.draw(self.screen)
+            
+            elif self.state == STATE_GAMEOVER:
+                
+                if key == K_RETURN:
+                    self.state = STATE_MENU
+                    self.menu = Menu(SCREEN_WIDTH, SCREEN_HEIGHT)
+                    self.game = None
+                    continue
+
+                self.game.draw(self.screen)
+                self.game.draw_game_over(self.screen)
                 
             
             pygame.display.update()
-            # Wait for 1 second
-            # self.clock.tick(1)
+            self.clock.tick(60)
+
 
             
-
 
 wana = Wana()
 wana.run()

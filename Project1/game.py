@@ -57,7 +57,7 @@ class Game:
         
         # Draw Square of moving place
         if self.human_move_piece_selected:
-            self.draw_square(screen, self.human_move[1], (0, 155, 155), padding=10)
+            self.draw_square(screen, self.human_move[1], (0, 190, 190), padding=10)
 
         # Draw Board
         for i in range(self.state.width):
@@ -70,6 +70,11 @@ class Game:
                     self.draw_square(screen, (i, j), (255, 0, 0))
                 elif self.state.board[i][j] == 2:
                     self.draw_square(screen, (i, j), (0, 0, 255))
+
+        # Draw Moving Options
+        if self.human_move_piece_selected:
+            for move in self.state.available_moves_from(self.human_move[0]):
+                self.draw_square(screen, move[1], (180, 180, 180))
 
     def draw_square(self, screen, pos, color, padding=0):
         pygame.draw.rect(screen, color, 
@@ -94,5 +99,15 @@ class Game:
         screen.blit(small_text, (SIDE_BORDER + BOARD_WIDTH//2-260, UP_BORDER + BOARD_WIDTH//2+50))
 
 
+    def draw_pause(self, screen):
+        # Make the background darker
+        surface = pygame.Surface((BOARD_WIDTH, BOARD_WIDTH))
+        surface.set_alpha(128)
+        surface.fill((0, 0, 0))
+        screen.blit(surface, (SIDE_BORDER, UP_BORDER))
 
+        big_font = pygame.font.SysFont("arial", 100)
+        big_text = big_font.render("PAUSE", True, (255, 255, 255))
+
+        screen.blit(big_text, (SIDE_BORDER + BOARD_WIDTH//2-170, UP_BORDER + BOARD_WIDTH//2-50))
         

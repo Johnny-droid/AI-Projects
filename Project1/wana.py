@@ -72,6 +72,13 @@ class Wana:
                 self.game.draw_game_over(self.screen)
                 
             
+            elif self.state == STATE_PAUSE:
+
+                if (self.game != None):
+                    self.game.draw(self.screen)
+                    
+                self.game.draw_pause(self.screen)
+
             pygame.display.update()
             self.clock.tick(60)
 

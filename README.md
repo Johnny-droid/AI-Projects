@@ -4,10 +4,10 @@
 
 ### Description
 
-Wana is a board game played by two players. The game is played on a 9x9 board. Each player has 8 pieces.
+Wana is a board game played by two players. The game is played on the board represented. Each player has 8 pieces.
 The pieces are placed on the board in the following way:
 
-![Wana Board](/doc/wana_board.jpeg)
+![Wana Board](/Project1/doc/wana_board.jpeg)
 
 The objective of the game is to block one of the opponent's pieces in all directions. The game ends when one of the players manages to block one of the opponent's pieces.
 

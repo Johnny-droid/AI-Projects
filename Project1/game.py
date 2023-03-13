@@ -13,6 +13,24 @@ UP_BORDER = 100
 BOARD_WIDTH = 700
 INNER_SQUARE_WIDTH_PERCENTAGE = 0.9
 
+# Assets
+EMPTY_SLOT_IMG = pygame.image.load("assets/E_Slot.png")
+PLAYER_1_IMG = pygame.image.load("assets/1_Player.png")
+PLAYER_2_IMG = pygame.image.load("assets/2_Player.png")
+VER_CONNECTOR_IMG = pygame.image.load("assets/V_Connector.png")
+HOR_CONNECTOR_IMG = pygame.image.load("assets/H_Connector.png")
+BRIDGE_1_IMG = pygame.image.load("assets/1_Bridge.png")
+BRIDGE_2_IMG = pygame.image.load("assets/2_Bridge.png")
+BRIDGE_3_IMG = pygame.image.load("assets/3_Bridge.png")
+BRIDGE_4_IMG = pygame.image.load("assets/4_Bridge.png")
+SELECTED_SLOT_P1_IMG = pygame.image.load("assets/Slot_Select_P1.png")
+SELECTED_SLOT_P2_IMG = pygame.image.load("assets/Slot_Select_P2.png")
+POSSIBLE_SLOT_IMG = pygame.image.load("assets/Slot_Possible.png")
+MOVE_SLOT_IMG = pygame.image.load("assets/Slot_Move.png")
+BOARD_TEXTURE_IMG = pygame.image.load("assets/Board_Texture.png")
+
+IMGS = [EMPTY_SLOT_IMG, PLAYER_1_IMG, PLAYER_2_IMG, VER_CONNECTOR_IMG, HOR_CONNECTOR_IMG, BRIDGE_1_IMG, BRIDGE_2_IMG, BRIDGE_3_IMG, BRIDGE_4_IMG]
+
 
 class Game:
 
@@ -48,33 +66,34 @@ class Game:
             text1 = font.render("PLAYER 1", True, color_shade)
             text2 = font.render("PLAYER 2", True, color_white)
 
-        screen.blit(text1, (SIDE_BORDER + BOARD_WIDTH//2-115, UP_BORDER*1.3 + BOARD_WIDTH))
-        screen.blit(text2, (SIDE_BORDER + BOARD_WIDTH//2-115, UP_BORDER*0.4))
+        screen.blit(text1, (SIDE_BORDER, UP_BORDER*0.4))
+        screen.blit(text2, (BOARD_WIDTH + SIDE_BORDER - BOARD_WIDTH//3 + 40 , UP_BORDER*0.4))
 
-        # Draw Square of choosing piece
-        if self.human_turn:
-            self.draw_square(screen, self.human_move[0], (0, 255, 0), padding=10)
-        
-        # Draw Square of moving place
-        if self.human_move_piece_selected:
-            self.draw_square(screen, self.human_move[1], (0, 190, 190), padding=10)
 
         # Draw Board
         for i in range(self.state.width):
             for j in range(self.state.width):
-                if self.state.board[i][j] == -1:
-                    self.draw_square(screen, (i, j), (50, 50, 50))
-                elif self.state.board[i][j] == 0:
-                    self.draw_square(screen, (i, j), (255, 255, 255))
-                elif self.state.board[i][j] == 1:
-                    self.draw_square(screen, (i, j), (255, 0, 0))
-                elif self.state.board[i][j] == 2:
-                    self.draw_square(screen, (i, j), (0, 0, 255))
+                self.draw_image(screen, (i, j), BOARD_TEXTURE_IMG)
+        for i in range(self.state.width):
+            for j in range(self.state.width):
+                self.draw_image(screen, (i, j), IMGS[self.state.vboard[i][j]])
+
+        # Draw Square of choosing piece
+        if self.human_turn:
+            if self.state.player == 1:
+                self.draw_image(screen, self.human_move[0], SELECTED_SLOT_P1_IMG)
+            elif self.state.player == 2:
+                self.draw_image(screen, self.human_move[0], SELECTED_SLOT_P2_IMG)
 
         # Draw Moving Options
         if self.human_move_piece_selected:
             for move in self.state.available_moves_from(self.human_move[0]):
-                self.draw_square(screen, move[1], (180, 180, 180))
+                self.draw_image(screen, move[1], POSSIBLE_SLOT_IMG)      
+
+        # Draw Square of moving place
+        if self.human_move_piece_selected:
+            self.draw_image(screen, self.human_move[1], MOVE_SLOT_IMG)
+
 
     def draw_square(self, screen, pos, color, padding=0):
         pygame.draw.rect(screen, color, 
@@ -82,6 +101,12 @@ class Game:
              UP_BORDER + pos[0] * self.square_width + self.square_margin - padding/2, 
              self.inner_square_width + padding, self.inner_square_width + padding))
         
+    def draw_image(self, screen, pos, image):
+        resized_image = pygame.transform.scale(image, (int(self.square_width)+1, int(self.square_width)+1))
+        screen.blit(resized_image, (SIDE_BORDER + pos[1] * self.square_width, 
+                            UP_BORDER + pos[0] * self.square_width))
+        
+
     def draw_game_over(self, screen):
         # Make the background darker
         surface = pygame.Surface((BOARD_WIDTH, BOARD_WIDTH))

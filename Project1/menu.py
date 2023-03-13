@@ -46,7 +46,7 @@ class Menu:
             player = execute_minimax_move(heuristic_function2, 3)
         elif (type_player == 4):
             player = execute_minimax_move(heuristic_function3, 3)
-        elif (type_player == 4):
+        elif (type_player == 5):
             player = execute_minimax_move(heuristic_function4, 3)
         else:
             return

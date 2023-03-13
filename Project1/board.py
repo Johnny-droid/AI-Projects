@@ -3,16 +3,39 @@ from copy import deepcopy
 EMPTY = 0
 OUTSIDE = -1
 
+# 0 = empty space
+# 1 = player 1
+# 2 = player 2
+# 3 = vertical connector
+# 4 = horizontal connector
+# 5 = down-right connector
+# 6 = down-left connector
+# 7 = up-right connector
+# 8 = up-left connector
+
+
 board0 = [
-    [-1, -1, -1, 2, 0, 2, -1, -1, -1],
-    [-1, -1, -1, 2, 0, 2, -1, -1, -1],
-    [-1, -1, -1, 2, 0, 2, -1, -1, -1],
-    [ 0,  0,  0, 2, 0, 2,  0,  0,  0],
-    [ 0,  0,  0, 0, 0, 0,  0,  0,  0],
-    [ 0,  0,  0, 1, 0, 1,  0,  0,  0],
-    [-1, -1, -1, 1, 0, 1, -1, -1, -1],
-    [-1, -1, -1, 1, 0, 1, -1, -1, -1],
-    [-1, -1, -1, 1, 0, 1, -1, -1, -1]
+    [ -1, -1, -1,  0,  0,  0, -1, -1, -1],
+    [ -1, -1, -1,  0,  0,  0, -1, -1, -1],
+    [ -1, -1, -1,  0,  0,  0, -1, -1, -1],
+    [  1,  1,  1,  1,  0,  2,  2,  2,  2],
+    [  0,  0,  0,  0,  0,  0,  0,  0,  0],
+    [  1,  1,  1,  1,  0,  2,  2,  2,  2],
+    [ -1, -1, -1,  0,  0,  0, -1, -1, -1],
+    [ -1, -1, -1,  0,  0,  0, -1, -1, -1],
+    [ -1, -1, -1,  0,  0,  0, -1, -1, -1]
+]
+
+vboard0 = [
+    [ 5,  4,  4,  0,  0,  0,  4,  4,  6],
+    [ 3,  5,  4,  0,  0,  0,  4,  6,  3],
+    [ 3,  3,  5,  0,  0,  0,  6,  3,  3],
+    [ 1,  1,  1,  1,  0,  2,  2,  2,  2],
+    [ 0,  0,  0,  0,  0,  0,  0,  0,  0],
+    [ 1,  1,  1,  1,  0,  2,  2,  2,  2],
+    [ 3,  3,  7,  0,  0,  0,  8,  3,  3],
+    [ 3,  7,  4,  0,  0,  0,  4,  8,  3],
+    [ 7,  4,  4,  0,  0,  0,  4,  4,  8]
 ]
 
 connections0 = [
@@ -28,18 +51,33 @@ connections0 = [
 ]
 
 board1 = [
-    [-1, -1, -1, -1, 2, 0, 0, 2, -1, -1, -1, -1],
-    [-1, -1, -1, -1, 2, 0, 0, 2, -1, -1, -1, -1],
-    [-1, -1, -1, -1, 2, 0, 0, 2, -1, -1, -1, -1],
-    [-1, -1, -1, -1, 2, 0, 0, 2, -1, -1, -1, -1],
-    [ 0,  0,  0,  0, 0, 0, 0, 0,  0,  0,  0,  0],
-    [ 0,  0,  0,  0, 0, 0, 0, 0,  0,  0,  0,  0],
-    [ 0,  0,  0,  0, 0, 0, 0, 0,  0,  0,  0,  0],
-    [ 0,  0,  0,  0, 0, 0, 0, 0,  0,  0,  0,  0],
-    [-1, -1, -1, -1, 1, 0, 0, 1, -1, -1, -1, -1],
-    [-1, -1, -1, -1, 1, 0, 0, 1, -1, -1, -1, -1],
-    [-1, -1, -1, -1, 1, 0, 0, 1, -1, -1, -1, -1],
-    [-1, -1, -1, -1, 1, 0, 0, 1, -1, -1, -1, -1]
+    [-1, -1, -1, -1, 0, 0, 0, 0, -1, -1, -1, -1],
+    [-1, -1, -1, -1, 0, 0, 0, 0, -1, -1, -1, -1],
+    [-1, -1, -1, -1, 0, 0, 0, 0, -1, -1, -1, -1],
+    [-1, -1, -1, -1, 0, 0, 0, 0, -1, -1, -1, -1],
+    [ 1,  1,  1,  1, 0, 0, 0, 0,  2,  2,  2,  2],
+    [ 0,  0,  0,  0, 0, 0, 0, 0,  0,  0,  0,  2],
+    [ 0,  0,  0,  0, 0, 0, 0, 0,  0,  0,  0,  2],
+    [ 1,  1,  1,  1, 0, 0, 0, 0,  2,  2,  2,  2],
+    [-1, -1, -1, -1, 0, 0, 0, 0, -1, -1, -1, -1],
+    [-1, -1, -1, -1, 0, 0, 0, 0, -1, -1, -1, -1],
+    [-1, -1, -1, -1, 0, 0, 0, 0, -1, -1, -1, -1],
+    [-1, -1, -1, -1, 0, 0, 0, 0, -1, -1, -1, -1]
+]
+
+vboard1 = [
+    [ 5,  4,  4,  4,  0,  0,  0,  0,  4,  4,  4,  6],
+    [ 3,  5,  4,  4,  0,  0,  0,  0,  4,  4,  6,  3],
+    [ 3,  3,  5,  4,  0,  0,  0,  0,  4,  6,  3,  3],
+    [ 3,  3,  3,  5,  0,  0,  0,  0,  6,  3,  3,  3],
+    [ 1,  1,  1,  1,  0,  0,  0,  0,  2,  2,  2,  2],
+    [ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0],
+    [ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0],
+    [ 1,  1,  1,  1,  0,  0,  0,  0,  2,  2,  2,  2],
+    [ 3,  3,  3,  7,  0,  0,  0,  0,  8,  3,  3,  3],
+    [ 3,  3,  7,  4,  0,  0,  0,  0,  4,  8,  3,  3],
+    [ 3,  7,  4,  4,  0,  0,  0,  0,  4,  4,  8,  3],
+    [ 7,  4,  4,  4,  0,  0,  0,  0,  4,  4,  4,  8]
 ]
 
 connections1 = [
@@ -65,10 +103,12 @@ class State:
 
         if board_number == 0:
             self.board = board0
+            self.vboard = vboard0
             self.connections = connections0
             self.width = 9
         elif board_number == 1:
             self.board = board1
+            self.vboard = vboard1
             self.connections = connections1
             self.width = 12
         
@@ -79,7 +119,9 @@ class State:
 
         new_state = deepcopy(self)
         new_state.board[moveTo[0]][moveTo[1]] = self.board[moveFrom[0]][moveFrom[1]]
+        new_state.vboard[moveTo[0]][moveTo[1]] = self.vboard[moveFrom[0]][moveFrom[1]]
         new_state.board[moveFrom[0]][moveFrom[1]] = EMPTY
+        new_state.vboard[moveFrom[0]][moveFrom[1]] = EMPTY
         new_state.player = 3 - self.player
         new_state.update_winner()
 
@@ -110,8 +152,8 @@ class State:
         i, j = pos[0], pos[1]
 
         # UP
-        if self.board[(i-1)][j] == EMPTY:
-            moves.append(((i, j), ((i-1), j)))
+        if self.board[(i-1)%self.width][j] == EMPTY:
+            moves.append(((i, j), ((i-1)%self.width, j)))
         elif self.board[(i-1)][j] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
             moves.append(((i, j), self.connections[i][j]))
 
@@ -122,8 +164,8 @@ class State:
             moves.append(((i, j), self.connections[i][j]))
         
         # LEFT
-        if self.board[i][(j-1)] == EMPTY:
-            moves.append(((i, j), (i, (j-1))))
+        if self.board[i][(j-1)%self.width] == EMPTY:
+            moves.append(((i, j), (i, (j-1)%self.width)))
         elif self.board[i][(j-1)] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
             moves.append(((i, j), self.connections[i][j]))
         

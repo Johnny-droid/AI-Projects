@@ -78,14 +78,14 @@ def heuristic_function4(state, player):
                 if moves == 0:
                     counter -= 100
                 elif moves == 1:
-                    counter -= 10
+                    counter -= 5
             
             if state.board[i][j] == opponent:
                 moves = len(state.available_moves_from((i, j)))
                 if moves == 0:
                     counter += 100
                 elif moves == 1:
-                    counter += 10
+                    counter += 5
     return counter
 
 

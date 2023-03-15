@@ -23,6 +23,7 @@ def execute_human_move(game, key=None):
         elif key == K_SPACE and game.state.board[game.human_move[0][0]][game.human_move[0][1]] == game.state.player:
             game.human_move[1] = game.human_move[0]
             game.human_move_piece_selected = True
+
         
         
     # Decide where to move the piece
@@ -42,6 +43,8 @@ def execute_human_move(game, key=None):
             game.human_move[0] = game.human_move[1]
             game.human_move_piece_selected = False
             game.human_turn = False
+        elif key == K_ESCAPE:
+            game.human_move_piece_selected = False
 
         
 

@@ -67,7 +67,7 @@ class Game:
             text2 = font.render("PLAYER 2", True, color_white)
 
         screen.blit(text1, (SIDE_BORDER, UP_BORDER*0.4))
-        screen.blit(text2, (BOARD_WIDTH + SIDE_BORDER - BOARD_WIDTH//3 + 20 , UP_BORDER*0.4))
+        screen.blit(text2, (BOARD_WIDTH + SIDE_BORDER - BOARD_WIDTH//3 , UP_BORDER*0.4))
 
 
         # Draw Board
@@ -114,14 +114,14 @@ class Game:
         surface.fill((0, 0, 0))
         screen.blit(surface, (SIDE_BORDER, UP_BORDER))
         
-        big_font = pygame.font.SysFont("arial", 100)
+        big_font = pygame.font.SysFont("arial", 70)
         big_text = big_font.render("GAME OVER", True, (255, 255, 255))
         
-        small_font = pygame.font.SysFont("arial", 50)
+        small_font = pygame.font.SysFont("arial", 30)
         small_text = small_font.render("Player " + str(self.state.winner) + " won the game!", True, (255, 255, 255))
 
-        screen.blit(big_text, (SIDE_BORDER + BOARD_WIDTH//2-300, UP_BORDER + BOARD_WIDTH//2-50))
-        screen.blit(small_text, (SIDE_BORDER + BOARD_WIDTH//2-260, UP_BORDER + BOARD_WIDTH//2+50))
+        screen.blit(big_text, (SIDE_BORDER + BOARD_WIDTH//2-220, UP_BORDER + BOARD_WIDTH+5))
+        screen.blit(small_text, (SIDE_BORDER + BOARD_WIDTH//2-160, UP_BORDER + BOARD_WIDTH+65))
 
 
     def draw_pause(self, screen):

@@ -163,8 +163,6 @@ def execute_monte_carlo_move(iterations):
 
         best_child = max(root.children, key=lambda child: child.visits)
         game.state = best_child.state
-    
-    
 
     return monte_carlo_move
 
@@ -189,7 +187,7 @@ def traverse(node):
 def rollout(node):
     # Rollout a random game from the given node
     state = node.state
-    while state.winner == -1: ##################################################################################### CHECK THIS
+    while state.winner == -1:
         (moveFrom, moveTo) = random.choice(state.available_moves())
         state = state.move(moveFrom, moveTo)
     
@@ -200,7 +198,7 @@ def backpropagate(node, winner):
     # Backpropagate the winner of a rollout to all parent nodes
     while node is not None:
         node.visits += 1
-        if node.state.player != winner:
+        if node.state.player != winner: ##################################################################################### CHECK THIS
             node.value += 1
         node = node.parent
 

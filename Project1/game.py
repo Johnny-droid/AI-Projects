@@ -67,7 +67,7 @@ class Game:
             text2 = font.render("PLAYER 2", True, color_white)
 
         screen.blit(text1, (SIDE_BORDER, UP_BORDER*0.4))
-        screen.blit(text2, (BOARD_WIDTH + SIDE_BORDER - BOARD_WIDTH//3 + 40 , UP_BORDER*0.4))
+        screen.blit(text2, (BOARD_WIDTH + SIDE_BORDER - BOARD_WIDTH//3 + 20 , UP_BORDER*0.4))
 
 
         # Draw Board

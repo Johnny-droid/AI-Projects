@@ -2,7 +2,7 @@ import math
 import random
 from pygame.locals import *
 
-# HUMAN MOVE
+# HUMAN MOVE ============================================================================================================
 def execute_human_move(game, key=None):
     game.human_turn = True
     if key == None:
@@ -49,7 +49,7 @@ def execute_human_move(game, key=None):
         
 
             
-
+# MINMAX MOVE ============================================================================================================
 
 def heuristic_function1(state, player):
     counter = 0
@@ -129,3 +129,86 @@ def minimax(state, depth, alpha, beta, maximizing, player, evaluate_func):
             if (beta <= alpha):
                 break
         return value
+    
+
+
+# MONTE CARLO MOVE ========================================================================================================
+
+class Node:
+
+    def __init__(self, state, parent=None):
+        self.state = state
+        self.parent = parent
+        self.children = []
+        self.value = 0
+        self.visits = 0
+
+    def ucb1(self):
+        if self.visits == 0:
+            return math.inf
+        return self.value / self.visits + 2 * math.sqrt(math.log(self.parent.visits) / self.visits)
+    
+
+def execute_monte_carlo_move(iterations):
+
+    def monte_carlo_move(game, key=None):
+        root = Node(game.state)
+        
+        for i in range(iterations):
+            leaf = traverse(root)
+            winner = rollout(leaf)
+            backpropagate(leaf, winner)
+        
+        # print_monte_carlo_tree(root, 0)
+
+        best_child = max(root.children, key=lambda child: child.visits)
+        game.state = best_child.state
+    
+    
+
+    return monte_carlo_move
+
+
+
+def traverse(node):
+    # Traverse a tree until a leaf node is found (pick the best child node at each step)
+    while len(node.children) > 0:
+        max_value = max(node.children, key=lambda child: child.ucb1()).ucb1()
+        node = random.choice([child for child in node.children if child.ucb1() == max_value])
+    
+    # If the leaf node has not been visited, return it
+    if node.visits == 0:
+        return node
+    
+    # If the leaf node has been visited, expand it and return a random child node
+    else:
+        node.children = [Node(node.state.move(move[0], move[1]), node) for move in node.state.available_moves()]
+        return random.choice(node.children)
+
+
+def rollout(node):
+    # Rollout a random game from the given node
+    state = node.state
+    while state.winner == -1: ##################################################################################### CHECK THIS
+        (moveFrom, moveTo) = random.choice(state.available_moves())
+        state = state.move(moveFrom, moveTo)
+    
+    return state.winner
+    
+
+def backpropagate(node, winner):
+    # Backpropagate the winner of a rollout to all parent nodes
+    while node is not None:
+        node.visits += 1
+        if node.state.player != winner:
+            node.value += 1
+        node = node.parent
+
+
+def print_monte_carlo_tree(node, depth):
+    if (depth > 1): return
+    print("  " * depth, node.state.player, node.value, node.visits)
+    for child in node.children:
+        print_monte_carlo_tree(child, depth + 1)
+
+

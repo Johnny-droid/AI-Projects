@@ -4,6 +4,17 @@ import pygame_menu
 
 from ai import *
 
+options = [
+    ('Human', 0),
+    ('AI Lvl1 - Random', 1),
+    ('AI Lvl2 - MinMax 1', 2),
+    ('AI Lvl3 - MinMax 2', 3),
+    ('AI Lvl4 - MinMax 3', 4),
+    ('AI Lvl5 - MinMax 4', 5),
+    ('AI Lvl6 - Monte Carlo 10', 6),
+    ('AI Lvl7 - Monte Carlo 100', 7),
+    ('AI Lvl7 - Monte Carlo 500', 8)
+]
 
 class Menu:
 
@@ -13,8 +24,8 @@ class Menu:
         self.board_number = 0
         self.ready = False
         self.menu = pygame_menu.Menu('Wana Game', width, height, theme=pygame_menu.themes.THEME_DEFAULT) # It's possible to change the theme or even create a new one
-        self.menu.add.selector('Player 1 :', [('Human', 0), ('AI Lvl1', 1), ('AI Lvl2', 2), ('AI Lvl3', 3), ('AI Lvl4', 4), ('AI Lvl5', 5)], onchange=self.set_player1)
-        self.menu.add.selector('Player 2 :', [('Human', 0), ('AI Lvl1', 1), ('AI Lvl2', 2), ('AI Lvl3', 3), ('AI Lvl4', 4), ('AI Lvl5', 5)], onchange=self.set_player2)
+        self.menu.add.selector('Player 1 :', options, onchange=self.set_player1)
+        self.menu.add.selector('Player 2 :', options, onchange=self.set_player2)
         self.menu.add.selector('Board size :', [('9x9', 0), ('12x12', 1)], onchange=self.set_board_number)
         self.menu.add.button('Play', self.set_ready)
         self.menu.add.button('Quit', pygame_menu.events.EXIT)
@@ -48,6 +59,12 @@ class Menu:
             player = execute_minimax_move(heuristic_function3, 2)
         elif (type_player == 5):
             player = execute_minimax_move(heuristic_function4, 2)
+        elif (type_player == 6):
+            player = execute_monte_carlo_move(10)
+        elif (type_player == 7):
+            player = execute_monte_carlo_move(100)
+        elif (type_player == 8):
+            player = execute_monte_carlo_move(500)
         else:
             return
 

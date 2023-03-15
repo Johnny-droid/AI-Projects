@@ -38,6 +38,7 @@ vboard0 = [
     [ 7,  4,  4,  0,  0,  0,  4,  4,  8]
 ]
 
+
 connections0 = [
     [(0, 0), (0, 0), (0, 0), (3, 0), (0, 0), (3, 8), (0, 0), (0, 0), (0, 0)],
     [(0, 0), (0, 0), (0, 0), (3, 1), (0, 0), (3, 7), (0, 0), (0, 0), (0, 0)],
@@ -147,32 +148,61 @@ class State:
                     moves += self.available_moves_from((i, j))
         return moves
     
+
     def available_moves_from(self, pos):
-        moves = []
-        i, j = pos[0], pos[1]
+        moves = set()
 
-        # UP
-        if self.board[(i-1)%self.width][j] == EMPTY:
-            moves.append(((i, j), ((i-1)%self.width, j)))
-        elif self.board[(i-1)][j] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
-            moves.append(((i, j), self.connections[i][j]))
+        directions = [[0, 1], [1, 0], [0, -1], [-1, 0]]
+        x, y = pos[0], pos[1]
+        done = False
+        for i in range(len(directions)):
+            d = directions[i]
+            i, j = x, y
+            while not done:
+                prev_i, prev_j = i, j
+                i = (i+d[0]) % self.width
+                j = (j+d[1]) % self.width
+                if self.board[i][j] == EMPTY:
+                    moves.add(((x, y), (i, j)))
+                elif self.board[i][j] == OUTSIDE and self.board[self.connections[prev_i][prev_j][0]][self.connections[prev_i][prev_j][1]] == EMPTY:
+                    moves.add(((x, y), self.connections[prev_i][prev_j]))
+                    i, j = self.connections[prev_i][prev_j][0], self.connections[prev_i][prev_j][1]
+                    d[0] , d[1] = ((i-prev_i) // abs(i-prev_i) - d[0]), ((j-prev_j) // abs(j-prev_j)) - d[1]
+                else:
+                    done = True
+            done = False
 
-        # DOWN
-        if self.board[(i+1)%self.width][j] == EMPTY:
-            moves.append(((i, j), ((i+1)%self.width, j)))
-        elif self.board[(i+1)%self.width][j] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
-            moves.append(((i, j), self.connections[i][j]))
+        return list(moves)
+            
+    
+
+
+    # def available_moves_from(self, pos):
+    #     moves = []
+    #     i, j = pos[0], pos[1]
+
+    #     # UP
+    #     if self.board[(i-1)%self.width][j] == EMPTY:
+    #         moves.append(((i, j), ((i-1)%self.width, j)))
+    #     elif self.board[(i-1)%self.width][j] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
+    #         moves.append(((i, j), self.connections[i][j]))
+
+    #     # DOWN
+    #     if self.board[(i+1)%self.width][j] == EMPTY:
+    #         moves.append(((i, j), ((i+1)%self.width, j)))
+    #     elif self.board[(i+1)%self.width][j] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
+    #         moves.append(((i, j), self.connections[i][j]))
         
-        # LEFT
-        if self.board[i][(j-1)%self.width] == EMPTY:
-            moves.append(((i, j), (i, (j-1)%self.width)))
-        elif self.board[i][(j-1)] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
-            moves.append(((i, j), self.connections[i][j]))
+    #     # LEFT
+    #     if self.board[i][(j-1)%self.width] == EMPTY:
+    #         moves.append(((i, j), (i, (j-1)%self.width)))
+    #     elif self.board[i][(j-1)%self.width] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
+    #         moves.append(((i, j), self.connections[i][j]))
         
-        # RIGHT
-        if self.board[i][(j+1)%self.width] == EMPTY:
-            moves.append(((i, j), (i, (j+1)%self.width)))
-        elif self.board[i][(j+1)%self.width] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
-            moves.append(((i, j), self.connections[i][j]))
+    #     # RIGHT
+    #     if self.board[i][(j+1)%self.width] == EMPTY:
+    #         moves.append(((i, j), (i, (j+1)%self.width)))
+    #     elif self.board[i][(j+1)%self.width] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
+    #         moves.append(((i, j), self.connections[i][j]))
 
-        return moves
+    #     return moves

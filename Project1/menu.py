@@ -41,13 +41,13 @@ class Menu:
         elif (type_player == 1):
             player = execute_random_move
         elif (type_player == 2):
-            player = execute_minimax_move(heuristic_function1, 3)
+            player = execute_minimax_move(heuristic_function1, 2)
         elif (type_player == 3):
-            player = execute_minimax_move(heuristic_function2, 3)
+            player = execute_minimax_move(heuristic_function2, 2)
         elif (type_player == 4):
-            player = execute_minimax_move(heuristic_function3, 3)
+            player = execute_minimax_move(heuristic_function3, 2)
         elif (type_player == 5):
-            player = execute_minimax_move(heuristic_function4, 4)
+            player = execute_minimax_move(heuristic_function4, 2)
         else:
             return
 

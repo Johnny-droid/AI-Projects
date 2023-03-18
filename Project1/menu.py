@@ -56,9 +56,9 @@ class Menu:
         elif (type_player == 3):
             player = execute_minimax_move(heuristic_function2, 2)
         elif (type_player == 4):
-            player = execute_minimax_move(heuristic_function3, 2)
+            player = execute_minimax_move(heuristic_function3, 3)
         elif (type_player == 5):
-            player = execute_minimax_move(heuristic_function4, 2)
+            player = execute_minimax_move(heuristic_function4, 3)
         elif (type_player == 6):
             player = execute_monte_carlo_move(10)
         elif (type_player == 7):

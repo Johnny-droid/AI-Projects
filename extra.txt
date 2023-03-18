@@ -1,0 +1,20 @@
+def execute_monte_carlo_move(game, key=None):
+    best_move = None
+    best_value = -math.inf
+    for move in game.state.available_moves(): # move = ((i, j), (i', j'))
+        value = monte_carlo(game.state.move(move[0], move[1]), 10, game.state.player)
+        if (value > best_value):
+            best_value = value
+            best_move = move
+    game.state = game.state.move(best_move[0], best_move[1])
+
+def monte_carlo(state, iterations, player):
+    counter = 0
+    for i in range(iterations):
+        new_state = state
+        while (new_state.winner == -1):
+            (moveFrom, moveTo) = random.choice(new_state.available_moves())
+            new_state = new_state.move(moveFrom, moveTo)
+        if (new_state.winner == player):
+            counter += 1
+    return counter/iterations

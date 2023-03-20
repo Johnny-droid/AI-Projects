@@ -175,7 +175,7 @@ def traverse(node):
         node = random.choice([child for child in node.children if child.ucb1() == max_value])
     
     # If the leaf node has not been visited, return it
-    if node.visits == 0:
+    if node.visits == 0 or node.state.winner != -1: ###################################### Check this
         return node
     
     # If the leaf node has been visited, expand it and return a random child node

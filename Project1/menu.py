@@ -13,7 +13,8 @@ options = [
     ('AI Lvl5 - MinMax 4', 5),
     ('AI Lvl6 - Monte Carlo 10', 6),
     ('AI Lvl7 - Monte Carlo 100', 7),
-    ('AI Lvl7 - Monte Carlo 500', 8)
+    ('AI Lvl7 - Monte Carlo 500', 8),
+    ('AI Lvl8 - Monte Carlo 1000', 9)
 ]
 
 class Menu:
@@ -65,6 +66,8 @@ class Menu:
             player = execute_monte_carlo_move(100)
         elif (type_player == 8):
             player = execute_monte_carlo_move(500)
+        elif (type_player == 9):
+            player = execute_monte_carlo_move(1000)
         else:
             return
 

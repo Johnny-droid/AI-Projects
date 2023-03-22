@@ -1,6 +1,8 @@
 import math
 import random
+import time
 from pygame.locals import *
+
 
 # HUMAN MOVE ============================================================================================================
 def execute_human_move(game, key=None):
@@ -56,7 +58,7 @@ def heuristic_function1(state, player):
     for i in range(state.width):
         for j in range(state.width):
             if state.board[i][j] == player:
-                counter += len(state.available_moves_from((i, j)))
+                counter += len(state.directions_available_from((i, j)))
     return counter
 
 def heuristic_function2(state, player):
@@ -65,7 +67,7 @@ def heuristic_function2(state, player):
     for i in range(state.width):
         for j in range(state.width):
             if state.board[i][j] == opponent:
-                counter -= len(state.available_moves_from((i, j)))
+                counter -= len(state.directions_available_from((i, j)))
     return counter
 
 def heuristic_function3(state, player):
@@ -77,29 +79,54 @@ def heuristic_function4(state, player):
     for i in range(state.width):
         for j in range(state.width):
             if state.board[i][j] == player:
-                moves = len(state.available_moves_from((i, j)))
-                if moves == 0:
+                directions_free = len(state.directions_available_from((i, j)))
+                if directions_free == 0:
                     counter -= 100
-                elif moves == 1:
+                elif directions_free == 1:
                     counter -= 5
             
-            if state.board[i][j] == opponent:
-                moves = len(state.available_moves_from((i, j)))
-                if moves == 0:
+            elif state.board[i][j] == opponent:
+                directions_free = len(state.directions_available_from((i, j)))
+                if directions_free == 0:
                     counter += 100
-                elif moves == 1:
+                elif directions_free == 1:
                     counter += 5
     return counter
 
+def heuristic_function5(state, player):
+    opponent = 3 - player
+    if state.winner == player:
+        return math.inf // 2
+    elif state.winner == opponent:
+        return -math.inf // 2
 
+    counter = 0
+    for i in range(state.width):
+        for j in range(state.width):
+            if state.board[i][j] == player:
+                if len(state.directions_available_from((i, j))) == 1:
+                    counter -= 1
+            elif state.board[i][j] == opponent:
+                if len(state.directions_available_from((i, j))) == 1:
+                    counter += 1
+            
+            
+    return counter
 
 
 def execute_random_move(game, key=None):
+    
+    # Start counting time
+    start_time = time.time()
     (moveFrom, moveTo) = random.choice(game.state.available_moves())
     game.state = game.state.move(moveFrom, moveTo)
 
+    # Print time
+    print("Time: ", time.time() - start_time)
+
 def execute_minimax_move(evaluate_func, depth):
     def minimax_move(game, key=None):
+
         best_move = None
         best_value = -math.inf
         for move in game.state.available_moves(): # move = ((i, j), (i', j'))
@@ -108,6 +135,7 @@ def execute_minimax_move(evaluate_func, depth):
                 best_value = value
                 best_move = move
         game.state = game.state.move(best_move[0], best_move[1])
+
     return minimax_move
 
 def minimax(state, depth, alpha, beta, maximizing, player, evaluate_func):
@@ -152,6 +180,7 @@ class Node:
 def execute_monte_carlo_move(iterations):
 
     def monte_carlo_move(game, key=None):
+
         root = Node(game.state)
         
         for i in range(iterations):

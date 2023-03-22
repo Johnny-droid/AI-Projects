@@ -49,6 +49,8 @@ class Wana:
                 if self.menu.ready:
                     self.game = Game(self.menu.player1, self.menu.player2, self.menu.board_number)
                     self.state = STATE_GAME
+                    self.screen.fill((0, 0, 0))
+                    self.game.draw(self.screen)
                 
                 
                 

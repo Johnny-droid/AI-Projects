@@ -6,15 +6,16 @@ from ai import *
 
 options = [
     ('Human', 0),
-    ('AI Lvl1 - Random', 1),
-    ('AI Lvl2 - MinMax 1', 2),
-    ('AI Lvl3 - MinMax 2', 3),
-    ('AI Lvl4 - MinMax 3', 4),
-    ('AI Lvl5 - MinMax 4', 5),
-    ('AI Lvl6 - Monte Carlo 10', 6),
-    ('AI Lvl7 - Monte Carlo 100', 7),
-    ('AI Lvl7 - Monte Carlo 500', 8),
-    ('AI Lvl8 - Monte Carlo 1000', 9)
+    ('AI - Random', 1),
+    ('AI - MinMax 1', 2),
+    ('AI - MinMax 2', 3),
+    ('AI - MinMax 3', 4),
+    ('AI - MinMax 4', 5),
+    ('AI - MinMax 5', 6),
+    ('AI - Monte Carlo 10', 7),
+    ('AI - Monte Carlo 100', 8),
+    ('AI - Monte Carlo 500', 9),
+    ('AI - Monte Carlo 1000', 10)
 ]
 
 class Menu:
@@ -57,16 +58,18 @@ class Menu:
         elif (type_player == 3):
             player = execute_minimax_move(heuristic_function2, 2)
         elif (type_player == 4):
-            player = execute_minimax_move(heuristic_function3, 3)
+            player = execute_minimax_move(heuristic_function3, 2)
         elif (type_player == 5):
             player = execute_minimax_move(heuristic_function4, 3)
         elif (type_player == 6):
-            player = execute_monte_carlo_move(10)
+            player = execute_minimax_move(heuristic_function5, 3)
         elif (type_player == 7):
-            player = execute_monte_carlo_move(100)
+            player = execute_monte_carlo_move(10)
         elif (type_player == 8):
-            player = execute_monte_carlo_move(500)
+            player = execute_monte_carlo_move(100)
         elif (type_player == 9):
+            player = execute_monte_carlo_move(500)
+        elif (type_player == 10):
             player = execute_monte_carlo_move(1000)
         else:
             return

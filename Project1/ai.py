@@ -53,6 +53,7 @@ def execute_human_move(game, key=None):
             
 # MINMAX MOVE ============================================================================================================
 
+# Defensive evaluation function
 def heuristic_function1(state, player):
     counter = 0
     for i in range(state.width):
@@ -61,6 +62,7 @@ def heuristic_function1(state, player):
                 counter += len(state.directions_available_from((i, j)))
     return counter
 
+# Offensive evaluation function
 def heuristic_function2(state, player):
     opponent = 3 - player
     counter = 0
@@ -70,6 +72,7 @@ def heuristic_function2(state, player):
                 counter -= len(state.directions_available_from((i, j)))
     return counter
 
+# Combined evaluation function
 def heuristic_function3(state, player):
     return heuristic_function1(state, player) + heuristic_function2(state, player)
 

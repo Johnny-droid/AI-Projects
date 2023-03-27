@@ -124,33 +124,33 @@ class State:
         new_state.board[moveFrom[0]][moveFrom[1]] = EMPTY
         new_state.vboard[moveFrom[0]][moveFrom[1]] = EMPTY
         new_state.player = 3 - self.player
-        new_state.update_winner(moveTo)
+        new_state.update_winner()
 
         return new_state
     
     # Checks if around the last move, the pieces still have available moves (performance improvement compared to the below version, but not that much)
-    # If there is a problem with checking winner, it's possible to use the version below although this has been tested
-    def update_winner(self, last_move):
-        pieces = self.nearby_pieces_from(last_move)
+    # There are some situations where it doesn't work, that's why I left the below version
+    # def update_winner(self, last_move):
+    #     pieces = self.nearby_pieces_from(last_move)
 
-        for nearby_piece in pieces:
-            if self.board[nearby_piece[0]][nearby_piece[1]] == EMPTY:
-                continue
+    #     for nearby_piece in pieces:
+    #         if self.board[nearby_piece[0]][nearby_piece[1]] == EMPTY:
+    #             continue
 
-            if len(self.available_moves_from(nearby_piece)) == 0:
-                self.winner = 3 - self.board[nearby_piece[0]][nearby_piece[1]]
-                return self.winner
-        return -1
-
-    # def update_winner(self):
-    #     for i in range(self.width):
-    #         for j in range(self.width):
-    #             if self.board[i][j] == 1 or self.board[i][j] == 2:
-    #                 # If the piece is blocked, the opponent wins
-    #                 if len(self.available_moves_from((i, j))) == 0:
-    #                     self.winner = 3 - self.board[i][j]
-    #                     return self.winner
+    #         if len(self.available_moves_from(nearby_piece)) == 0:
+    #             self.winner = 3 - self.board[nearby_piece[0]][nearby_piece[1]]
+    #             return self.winner
     #     return -1
+
+    def update_winner(self):
+        for i in range(self.width):
+            for j in range(self.width):
+                if self.board[i][j] == 1 or self.board[i][j] == 2:
+                    # If the piece is blocked, the opponent wins
+                    if len(self.available_moves_from((i, j))) == 0:
+                        self.winner = 3 - self.board[i][j]
+                        return self.winner
+        return -1
 
 
     def available_moves(self):
@@ -223,32 +223,32 @@ class State:
 
 
     # Used for updating the winner around a specific piece (used to improve performance)
-    def nearby_pieces_from(self, pos):
-        pieces = []
-        i, j = pos[0], pos[1]
+    # def nearby_pieces_from(self, pos):
+    #     pieces = []
+    #     i, j = pos[0], pos[1]
 
-        # UP
-        if self.board[(i-1)%self.width][j] != EMPTY and self.board[(i-1)%self.width][j] != OUTSIDE:
-            pieces.append(((i-1)%self.width, j))
-        elif self.board[(i-1)%self.width][j] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
-            pieces.append(self.connections[i][j])
+    #     # UP
+    #     if self.board[(i-1)%self.width][j] != EMPTY and self.board[(i-1)%self.width][j] != OUTSIDE:
+    #         pieces.append(((i-1)%self.width, j))
+    #     elif self.board[(i-1)%self.width][j] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
+    #         pieces.append(self.connections[i][j])
 
-        # DOWN
-        if self.board[(i+1)%self.width][j] != EMPTY and self.board[(i+1)%self.width][j] != OUTSIDE:
-            pieces.append(((i+1)%self.width, j))
-        elif self.board[(i+1)%self.width][j] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
-            pieces.append(self.connections[i][j])
+    #     # DOWN
+    #     if self.board[(i+1)%self.width][j] != EMPTY and self.board[(i+1)%self.width][j] != OUTSIDE:
+    #         pieces.append(((i+1)%self.width, j))
+    #     elif self.board[(i+1)%self.width][j] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
+    #         pieces.append(self.connections[i][j])
         
-        # LEFT
-        if self.board[i][(j-1)%self.width] != EMPTY and self.board[i][(j-1)%self.width] != OUTSIDE:
-            pieces.append((i, (j-1)%self.width))
-        elif self.board[i][(j-1)%self.width] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
-            pieces.append(self.connections[i][j])
+    #     # LEFT
+    #     if self.board[i][(j-1)%self.width] != EMPTY and self.board[i][(j-1)%self.width] != OUTSIDE:
+    #         pieces.append((i, (j-1)%self.width))
+    #     elif self.board[i][(j-1)%self.width] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
+    #         pieces.append(self.connections[i][j])
         
-        # RIGHT
-        if self.board[i][(j+1)%self.width] != EMPTY and self.board[i][(j+1)%self.width] != OUTSIDE:
-            pieces.append((i, (j+1)%self.width))
-        elif self.board[i][(j+1)%self.width] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
-            pieces.append(self.connections[i][j])
+    #     # RIGHT
+    #     if self.board[i][(j+1)%self.width] != EMPTY and self.board[i][(j+1)%self.width] != OUTSIDE:
+    #         pieces.append((i, (j+1)%self.width))
+    #     elif self.board[i][(j+1)%self.width] == OUTSIDE and self.board[self.connections[i][j][0]][self.connections[i][j][1]] == EMPTY:
+    #         pieces.append(self.connections[i][j])
 
-        return pieces
+    #     return pieces

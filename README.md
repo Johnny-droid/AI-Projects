@@ -32,4 +32,6 @@ Make sure you have all the following libraries installed:
 
 They are required to run the game.
 
+### Presentation
 
+The presentation is inside the doc folder. It contains a detailed description of the project, as well as the results and conclusions.

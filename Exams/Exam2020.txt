@@ -1,13 +1,159 @@
 Exam 2019/2020
 
 Exercise 1
+1.1) 
+
+State Representation: Matrix 3x3, where for each cell we have a value V or B
+
+Initial State:
+[[V, B, V],
+ [V, B, V],
+ [B, B, B]]
+
+Goal State:
+[[B, B, B],
+ [B, B, B],
+ [B, B, B]]
+
+Actions:
+- Turn around each cell of a square 4x4
+    - Square UpLeft: M[0][0] = !M[0][0], M[0][1] = !M[0][1], M[1][0] = !M[1][0], M[1][1] = !M[1][1]
+    - Square UpRight: M[0][1] = !M[0][1], M[0][2] = !M[0][2], M[1][1] = !M[1][1], M[1][2] = !M[1][2]
+    - Square DownLeft: M[1][0] = !M[1][0], M[1][1] = !M[1][1], M[2][0] = !M[2][0], M[2][1] = !M[2][1]
+    - Square DownRight: M[1][1] = !M[1][1], M[1][2] = !M[1][2], M[2][1] = !M[2][1], M[2][2] = !M[2][2]
+- Turn around each cell of a square 9x9
+    - For (i = 0; i < 3; i++)
+        For (j = 0; j < 3; j++)
+            M[i][j] = !M[i][j]
+
+Pré-conditions: There are no pre-conditions for this problem
+
+Cost: - Turn square 4x4 = 4
+      - Turn square 9x9 = 9
+
+1.2)
+
+The branch factor of this problem is 5, since there are 5 possible actions in every state.
+(Although it can be reduced to 4, since making to equal moves in a row outputs the exactly the same result)
+
+The number of possible states: 2⁹ = 512
+
+1.3)    Depth1   Depth2
+VBV     BVV      BBB
+VBV     BVV      BBB
+BBB     BBB      BBB
+
+        VVB
+        VVB
+        BBB
+
+        VBV
+        BVV
+        VVB
+
+        VBV
+        VVB
+        BVV
+
+        BVB
+        BVB
+        VVV
+
+
+1.4)
+h(n) can be a function that counts the number of red pieces in the board.
+
+
+2.1)
+Representation in File:
+- Each line is an establishment that can be visited
+- Each line has the following format: x y 
+    - x: x coordinate of the establishment
+    - y: y coordinate of the establishment
+
+Ex of a file:
+1 2
+3 4
+5 6
+1 7
+
+...
+
+State Representation: 2 lists of establishments to represent the route of each car
+- route1 = [E11, E12,..., En]
+- route2 = [E21, E22,..., Em]
+- notVisited = [E31, E32,..., Ek]
+
+2.2)
+Rules: 
+
+An establishment can only be in one list at a time (lists disjoint)
+- route1 U route2 U notVisited = allEstablishments
+
+The route of each car and the inspections musn't take more than 8 hours
+
+Optimization criteria: Maximize the number of establishments visited
+def h(route1, route2):
+    return len(route1) + len(route2)
+
+2.3)
+A = (20, 20)
+B = (10, 10) 
+C = (10, 0)
+D = (10, 20)
+E = (20, 10)
+
+Visit 1: A, B, C
+
+Origin --- 2h ---> A ---- 1h ---> B ---- 0.5h ---> C ---- 0.5h ---> Origin
+Total = 2 + 1 + 0.5 + 0.5 + 3*1 = 7h
+
+Visit 2: D, E
+Origin --- 1.5h ---> D ---- 1h ---> E ---- 1.5h ---> Origin
+Total = 1.5 + 1 + 1.5 + 2*1 = 6h
+
+Ou seja seria possível realizar estas rotas
+
+2.4)
+
+def neighborhod(state):
+    # We are going to switch establishments between the routes and the notVisited list
+
+    new_state = copy.deepcopy(state)
+
+    rand_l1 = random.randint(0, 2)
+    rand_l2 = random.randint(0, 2)
+    rand_e1 = random.randint(0, len(state[rand_l1]))
+    rand_e2 = random.randint(0, len(state[rand_l2]))
+
+    new_state[rand_l1][rand_e1], new_state[rand_l2][rand_e2] = state[rand_l2][rand_e2], state[rand_l1][rand_e1]
+
+    return new_state
+
+
+Original State = [[A, B, C], [D, E], []]
+
+Let's say for example:
+rand_l1 = 0
+rand_l2 = 1
+rand_e1 = 0
+rand_e2 = 1
+
+
+We are going to switch A with E, hence, the new state is:
+New State = [[E, B, C], [D, A], []]
+
+Another example:
+rand_l1 = 1
+rand_l2 = 0
+rand_e1 = 1
+rand_e2 = 2
+
+We are going to switch E with C, hence, the new state is:
+New State = [[A, B, E], [D, C], []]
 
 
 
-
-
-
-
-
+    
 
 

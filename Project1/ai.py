@@ -204,7 +204,7 @@ def traverse(node):
         node = random.choice([child for child in node.children if child.ucb1() == max_value])
     
     # If the leaf node has not been visited, return it
-    if node.visits == 0 or node.state.winner != -1: ###################################### Check this
+    if node.visits == 0 or node.state.winner != -1: 
         return node
     
     # If the leaf node has been visited, expand it and return a random child node
@@ -227,7 +227,7 @@ def backpropagate(node, winner):
     # Backpropagate the winner of a rollout to all parent nodes
     while node is not None:
         node.visits += 1
-        if node.state.player != winner: ##################################################################################### CHECK THIS
+        if node.state.player != winner:
             node.value += 1
         node = node.parent
 

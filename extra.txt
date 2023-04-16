@@ -1,3 +1,5 @@
+# This was just random code when trying monte carlo
+
 def execute_monte_carlo_move(game, key=None):
     best_move = None
     best_value = -math.inf
@@ -18,3 +20,5 @@ def monte_carlo(state, iterations, player):
         if (new_state.winner == player):
             counter += 1
     return counter/iterations
+
+

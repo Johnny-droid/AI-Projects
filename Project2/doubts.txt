@@ -1,17 +1,15 @@
 1. When finding the outliers in the data set, even though they follow the trend,
-should we filter out the outlier?
-
+should we filter out the outlier? (Filter out the outliers that are clearly outliers)
 
 2. How do we decide if we should oversample or undersample the data set?
 Or should we try both?
-
 
 3. What it's the identification of the target concept exactly?
 
 4. Should I divide the training and testing set, or should I use just use cross validation?
 I was thinking about first doing the grid in order to find the best option, and the grid uses cross validation.
 
-5. The best parameters of grid varies a lot, so I'm not sure if I should use the best parameters
+5. The best parameters of grid varies a lot, so I'm not sure if I should use the best parameters (use random = 0)
 
 6. How does the grid train the model if we don't pass the testing set?
 Won't it overfit the training set?

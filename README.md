@@ -35,3 +35,13 @@ They are required to run the game.
 ### Presentation
 
 The presentation is inside the doc folder. It contains a detailed description of the project, as well as the results and conclusions.
+
+
+
+## Project 2: Cancer Detection
+
+### Description
+
+The objective of this project was to build an AI model that could predict if a cell is cancerous or not, based on a set of features. 
+
+

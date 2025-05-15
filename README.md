@@ -16,7 +16,7 @@ Keep in mind that the pieces can move in all directions (up, down, left, right),
 
 Our objective was to build a working **Wana** game in python, that can be played by two players. These players can be either human or AI players.
 
-The AI uses a **minimax** algorithm with **alpha-beta pruning** to find the best move. There are multiple levels of difficulty, determined by the heuristic used as well as the depth of the minimax algorithm.
+The AI uses a **minimax** algorithm with **alpha-beta pruning** to find the best move. There are multiple levels of difficulty, determined by the heuristic used as well as the depth of the minimax algorithm. It is also possible to use the Monte Carlo algorithm for the AI. 
 
 ### How to run
 
